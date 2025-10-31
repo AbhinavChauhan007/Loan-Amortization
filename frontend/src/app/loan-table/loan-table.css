@@ -1,0 +1,261 @@
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Form Styling */
+form.loan-form {
+  width: 100%;
+  padding: 24px 5vw;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Flex container: allow wrap to prevent overflow */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Form group: column stack */
+.form-group {
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 180px;
+}
+
+/* Labels: fixed minimum width for better alignment */
+label {
+  font-weight: 600;
+  color: #0d6efd;
+  min-width: 120px;
+}
+
+/* Input/select fill remaining width */
+input,
+select {
+  flex: 1;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  background: #fff;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.95rem;
+  min-width: 0;
+}
+
+input:focus,
+select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.3);
+  outline: none;
+}
+
+/* Buttons */
+.btn-calculate,
+.btn-reset {
+  padding: 8px 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+  flex: 0 0 auto; /* Prevent stretching */
+}
+
+.btn-calculate {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.btn-calculate:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-reset {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-reset:hover {
+  background-color: #5c636a;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons container */
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Buttons row specific fix */
+.form-row.buttons-row {
+  margin-bottom: 0;
+}
+
+.form-row.buttons-row .form-group {
+  flex: unset;
+  min-width: unset;
+}
+
+/* Summary Card Styling */
+.summary-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  width: 100%; /* matches form width */
+  box-sizing: border-box;
+}
+
+/* Summary item flex row and space-between */
+.summary-item {
+  flex: 1 1 220px;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #343a40;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+  min-width: 220px;
+}
+
+.summary-item:hover {
+  transform: translateY(-1px);
+}
+
+.summary-item .label {
+  color: #0d6efd;
+  margin-right: 5px;
+}
+
+.summary-item .value {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Table container styling */
+.table-container {
+  width: 100%; /* matches form width */
+  margin: 24px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.loan-schedule {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+.loan-schedule thead {
+  background-color: #e9f2ff;
+  color: #0d6efd;
+  font-weight: 700;
+  border-radius: 10px 10px 0 0;
+}
+
+.loan-schedule th,
+.loan-schedule td {
+  padding: 10px 12px;
+  text-align: center;
+  border: 1px solid #dee2e6;
+}
+
+.loan-schedule tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+/* Editable Table Cells */
+.loan-schedule td input[type="number"],
+.loan-schedule td input[type="text"] {
+  width: 80px;
+  padding: 5px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.loan-schedule td input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+  outline: none;
+}
+
+/* Highlight edited cells */
+.loan-schedule td.edited {
+  background-color: #fff3cd; /* light yellow highlight */
+  transition: background-color 0.3s ease;
+}
+
+/* Advanced Panel */
+.advanced-panel {
+  margin: 10px 0;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  form.loan-form {
+    padding: 16px 2vw;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .summary-card,
+  .table-container {
+    width: 100%; /* matches form width */
+  }
+
+  .summary-item {
+    min-width: 100%;
+  }
+
+  .loan-schedule th,
+  .loan-schedule td {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  .advanced-panel {
+    margin: 16px 0;
+    padding: 8px;
+  }
+
+  /* Buttons row responsive */
+  .buttons-container {
+    justify-content: flex-start;
+  }
+}

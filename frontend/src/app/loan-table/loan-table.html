@@ -1,0 +1,215 @@
+<form (ngSubmit)="submitForm()" class="loan-form">
+  <!-- Validation Error -->
+  <div *ngIf="validationError" style="color: red; font-weight: 600; margin-bottom: 12px">
+    {{ validationError }}
+  </div>
+
+  <!-- Input Fields -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="principal">Principal</label>
+      <input
+        id="principal"
+        name="principal"
+        type="number"
+        [(ngModel)]="principal"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="roi">Rate of Interest (%)</label>
+      <input id="roi" name="roi" type="number" [(ngModel)]="roi" class="form-control" required />
+    </div>
+    <div class="form-group">
+      <label for="term">Term</label>
+      <input id="term" name="term" type="number" [(ngModel)]="term" class="form-control" required />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="termUnit">Term Unit</label>
+      <select id="termUnit" [(ngModel)]="termUnit" name="termUnit" required>
+        <option *ngFor="let unit of termUnits" [ngValue]="unit.value">
+          {{ unit.label }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="paymentFrequency">Payment Frequency</label>
+      <select
+        id="paymentFrequency"
+        name="paymentFrequency"
+        [(ngModel)]="paymentFrequency"
+        class="form-control"
+      >
+        <option value="" disabled>Select Frequency</option>
+        <option *ngFor="let f of paymentFrequencies" [value]="f">{{ f }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date</label>
+      <input
+        id="startDate"
+        name="startDate"
+        type="date"
+        [(ngModel)]="startDate"
+        class="form-control"
+      />
+    </div>
+  </div>
+
+  <!-- Advanced Options -->
+  <div class="form-row" style="margin-bottom: 8px">
+    <div class="form-group" style="flex: 1">
+      <button
+        type="button"
+        class="btn-calculate"
+        style="background-color: #6c757d"
+        (click)="advancedOpen = !advancedOpen"
+      >
+        {{ advancedOpen ? 'Hide Advanced Options' : 'Show Advanced Options' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="advanced-panel" *ngIf="advancedOpen">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="preClosureCharge">PreClosure Charge</label>
+        <input
+          id="preClosureCharge"
+          name="preClosureCharge"
+          type="number"
+          [(ngModel)]="preClosure.preClosureCharge"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group">
+        <label for="preClosurePercent">PreClosure %</label>
+        <input
+          id="preClosurePercent"
+          name="preClosurePercent"
+          type="number"
+          [(ngModel)]="preClosure.preClosurePercent"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group"></div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="roundingMode">Rounding Direction</label>
+        <select
+          id="roundingMode"
+          name="roundingMode"
+          [(ngModel)]="roundingMode"
+          class="form-control"
+        >
+          <option value="" disabled>Select Rounding</option>
+          <option *ngFor="let r of roundingDirections" [value]="r">{{ r }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="roundTo">Round To</label>
+        <input
+          id="roundTo"
+          name="roundTo"
+          type="number"
+          [(ngModel)]="roundTo"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group"></div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="form-row buttons-row">
+    <div class="buttons-container">
+      <button type="submit" class="btn-calculate">Calculate</button>
+      <button type="button" class="btn-reset" (click)="resetForm()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-card" *ngIf="tableData.length > 0">
+    <div class="form-row">
+      <div class="form-group summary-item">
+        <span class="label">Total Amount Paid:</span>
+        <span class="value">{{ totalAmountPaid | currency : 'INR' }}</span>
+      </div>
+      <div class="form-group summary-item">
+        <span class="label">Total Principal Paid:</span>
+        <span class="value">{{ totalPricipalPaid | currency : 'INR' }}</span>
+      </div>
+      <div class="form-group summary-item">
+        <span class="label">Total Interest Paid:</span>
+        <span class="value">{{ totalInterestPaid | currency : 'INR' }}</span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group summary-item">
+        <span class="label">No of EMIs:</span>
+        <span class="value">{{ emis }}</span>
+      </div>
+      <div class="form-group summary-item">
+        <span class="label">Total Preclosure Charge:</span>
+        <span class="value">{{ totalPreClosureCharge | currency : 'INR' }}</span>
+      </div>
+      <div class="form-group summary-item">
+        <span class="label">Total Prepayments:</span>
+        <span class="value">{{ totalPrepayments | currency : 'INR' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container" *ngIf="tableData.length > 0">
+    <table class="loan-schedule">
+      <thead>
+        <tr>
+          <th>Payment</th>
+          <th>Opening Balance</th>
+          <th>EMI</th>
+          <th>Principal Paid</th>
+          <th>Interest Paid</th>
+          <th>ROI (%)</th>
+          <th>Prepayment</th>
+          <th>Remaining Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of tableData; let i = index">
+          <td>{{ row.termNo }}</td>
+          <td>{{ row.openingBalance | currency : 'INR' }}</td>
+          <td>{{ row.monthlyEmi | currency : 'INR' }}</td>
+          <td>{{ row.principalPaid | currency : 'INR' }}</td>
+          <td>{{ row.interestPaid | currency : 'INR' }}</td>
+          <td>
+            <input
+              type="number"
+              [(ngModel)]="row.roi"
+              [name]="'roi' + i"
+              (change)="updateCell(row, 'roi', row.roi)"
+              class="editable-cell"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              [(ngModel)]="row.prepaymentAmount"
+              [name]="'prepayment' + i"
+              (change)="updateCell(row, 'prepaymentAmount', row.prepaymentAmount)"
+              class="editable-cell"
+            />
+          </td>
+          <td>{{ row.remainingBalance | currency : 'INR' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</form>
